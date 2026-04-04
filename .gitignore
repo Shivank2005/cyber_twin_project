@@ -1,0 +1,62 @@
+# 🔐 Environment / Secrets
+.env
+*.env
+
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# 🧪 Jupyter Notebooks
+.ipynb_checkpoints/
+
+# 📦 Python packaging
+build/
+dist/
+*.egg-info/
+
+# 🧠 ML Models / Large Files
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# 🗃️ Data files (optional - include if large)
+*.csv
+*.xlsx
+
+# 🧾 Logs
+*.log
+
+# 🖥️ OS files
+.DS_Store
+Thumbs.db
+
+# 🧰 IDE / Editor
+.vscode/
+.idea/
+
+# 🐳 Docker (optional)
+*.dockerignore
+
+# 🔐 Database configs (important)
+config.py
+secrets.json
+
+# 🔑 Credentials (VERY IMPORTANT)
+*.pem
+*.key
+
+# 🧪 Temporary files
+*.tmp
+*.bak
+
+# Ignore specific files
+Flowchart s2.png
+README.md
