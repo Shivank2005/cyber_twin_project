@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SecureX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>SecureX Portal</h1>
+        <nav class="auth-nav">
+            <a href="/">Logout</a>
+        </nav>
+    </header>
+
+    <div class="center-wrapper" style="flex-direction: column;">
+        <div class="hero" style="margin-top: 20px; margin-bottom: 20px;">
+            <h2 style="font-size: 32px;">Welcome to SecureX Dashboard</h2>
+            <p>System metrics and organization info are outlined below.</p>
+        </div>
+        
+        <div class="info-cards" style="max-width: 900px; width: 100%;">
+            <div class="glass-container info-card">
+                <h3>BSI Learning Australia</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">BSI Learning offers innovative training solutions across Australia. Their mission is to empower individuals with practical skills and knowledge that align with the demands of the global workforce.</p>
+            </div>
+            
+            <div class="glass-container info-card">
+                <h3>SRM AP University</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">SRM University in Andhra Pradesh is a leading institution known for fostering innovation, research, and holistic education to create globally competitive professionals.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

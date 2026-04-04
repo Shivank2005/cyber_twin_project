@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | SecureX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>SecureX Hub</h1>
+        <nav class="auth-nav">
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+        </nav>
+    </header>
+
+    <div class="center-wrapper">
+        <div class="glass-container auth-form">
+            <h2>Create Access Key</h2>
+            <form action="/register" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a secure username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Provision Account</button>
+            </form>
+            <div class="footer-link">
+                <p>Already provisioned? <a href="/login">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
