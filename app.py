@@ -2,8 +2,15 @@ from flask import Flask, request, render_template, redirect, url_for
 import mysql.connector
 from ldap3 import Server, Connection, ALL
 import bcrypt
+from models.AI_agent3.session_hijacking import run_session_model
+from models.AI_agent2.XSS_attack_prediction import run_xss_model
+from models.AI_agent1.sql_injection_detectio import run_sql_model
 
+threat_count = 0
 app = Flask(__name__)
+
+# Global variables for threat count and risk level
+
 
 # MySQL Configuration (Database Server)
 db_config = {
@@ -38,6 +45,123 @@ def index():
 @app.route('/home')
 def home():
     return render_template('home.html')
+
+@app.route('/xss', methods=['GET', 'POST'])
+def xss():
+    global threat_count
+
+    if request.method == 'POST':
+        result = run_xss_model()
+
+        # If model detects attack → increment
+        if result['accuracy'] < 1:  # or customize logic
+            threat_count += 1
+
+        return render_template('home.html',
+                               xss_result=result,
+                               show_xss=True,
+                               threat_count=threat_count)
+
+    return render_template('home.html', show_xss=False, threat_count=threat_count)
+
+# @app.route('/sql')
+# def sql():
+#     result = run_sql_model()
+#     return render_template('home.html', results=result)
+
+# @app.route('/sql', methods=['GET', 'POST'])
+# def sql():
+#     global threat_count
+
+#     if request.method == 'POST':
+#         results = run_sql_model()
+
+#         # Count detected attacks
+#         attacks = sum(1 for r in results if "Detected" in r['Result'])
+#         threat_count += attacks
+
+#         risk_level, risk_color = get_risk_level(threat_count)
+
+#     #     return render_template('home.html',
+#     #                            results=results,
+#     #                            show_table=True,
+#     #                            threat_count=threat_count)
+
+#     # return render_template('home.html', show_table=False, threat_count=threat_count)
+
+#     return render_template('home.html',
+#                            results=results if request.method=='POST' else None,
+#                            show_table=request.method=='POST',
+#                            threat_count=threat_count,
+#                            risk_level=risk_level,
+#                            risk_color=risk_color)
+
+@app.route('/sql', methods=['GET', 'POST'])
+def sql():
+    global threat_count
+
+    results = None  # ✅ default
+    show_table = False  # ✅ default
+
+    if request.method == 'POST':
+        results = run_sql_model()
+        show_table = True
+
+        # Count detected attacks
+        attacks = sum(1 for r in results if "Detected" in r['Result'])
+        threat_count += attacks
+
+    # ✅ ALWAYS calculate (important)
+    risk_level, risk_color = get_risk_level(threat_count)
+
+    return render_template('home.html',
+                           results=results,
+                           show_table=show_table,
+                           threat_count=threat_count,
+                           risk_level=risk_level,
+                           risk_color=risk_color)
+
+# @app.route('/session', methods=['GET', 'POST'])
+# def session():
+#     global threat_count
+
+#     if request.method == 'POST':
+#         result = run_session_model()
+
+#         # Example condition
+#         if result['accuracy'] < 0.95:
+#             threat_count += 1
+
+#         return render_template('home.html',
+#                                session_result=result,
+#                                show_session=True,
+#                                threat_count=threat_count)
+
+#     return render_template('home.html', show_session=False, threat_count=threat_count)
+@app.route('/session', methods=['GET', 'POST'])
+def session():
+    global threat_count
+
+    session_result = None  # ✅ default
+    show_session = False   # ✅ default
+
+    if request.method == 'POST':
+        session_result = run_session_model()
+        show_session = True
+
+        # Count threat (your logic)
+        if session_result['accuracy'] < 0.95:
+            threat_count += 1
+
+    # ✅ ALWAYS calculate risk
+    risk_level, risk_color = get_risk_level(threat_count)
+
+    return render_template('home.html',
+                           session_result=session_result,
+                           show_session=show_session,
+                           threat_count=threat_count,
+                           risk_level=risk_level,
+                           risk_color=risk_color)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -92,8 +216,8 @@ def register():
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -123,7 +247,41 @@ def login():
     return render_template('login.html')
 
 
+def get_risk_level(threat_count):
+    if threat_count < 3:
+        return "LOW", "lightgreen"
+    elif threat_count < 6:
+        return "MEDIUM", "orange"
+    else:
+        return "HIGH", "red"
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        db = mysql.connector.connect(**db_config)
+        cursor = db.cursor()
+        cursor.execute("SELECT password FROM users WHERE username=%s", (username,))
+        result = cursor.fetchone()
+        db.close()
+
+        if result:
+            stored_password = result[0]
+
+            if isinstance(stored_password, str):
+                stored_password = stored_password.encode('utf-8')
+
+            if bcrypt.checkpw(password.encode('utf-8'), stored_password):
+                return render_template('home.html')
+            else:
+                return "Invalid password"
+        else:
+            return "User not found"
+
+    return render_template('login.html')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

@@ -69,13 +69,15 @@ nav a:hover {
     box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
 }
 
-.auth-nav a:first-child {
-    border-color: transparent;
+.auth-nav a:last-child {
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--primary);
+    border-color: var(--primary);
 }
-.auth-nav a:first-child:hover {
-    background: var(--glass-bg);
-    color: var(--text-main);
-    box-shadow: none;
+
+.auth-nav a:last-child:hover {
+    background: var(--primary);
+    color: #000;
 }
 
 .glass-container {
