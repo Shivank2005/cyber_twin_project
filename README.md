@@ -101,23 +101,23 @@ Each machine learning module (SQL Injection, XSS Attack Prediction, Session Hija
 ---
 
 ## Project Structure
+```
 CyberX-AI-Digital-Twin-main/
-├── app.py                     # Main Flask app; handles routing, user registration/login with MySQL and LDAP.
-├── README.md                  # Project documentation.
-├── templates/                 # HTML templates for the web interface.
-│   ├── index.html             # Landing page.
-│   ├── home.html              # Home/Secure page.
-│   ├── login.html             # Login page.
-│   └── register.html          # Registration page.
-└── models/                    # Machine learning modules for attack detection.
-├── AI-agent1/             # SQL Injection detection module.
-│   └── sql_injection_detectio.py
-├── AI-agent2/             # XSS Attack prediction module.
-│   └── XSS_attack_prediction.py
-└── AI-agent3/             # Session Hijacking detection module.
-└── session_hijacking.py
-
----
+├── app.py                        # Main Flask app; handles routing, user registration/login with MySQL and LDAP.
+├── README.md                     # Project documentation.
+├── templates/                    # HTML templates for the web interface.
+│   ├── index.html                # Landing page.
+│   ├── home.html                 # Home/Secure page.
+│   ├── login.html                # Login page.
+│   └── register.html             # Registration page.
+└── models/                       # Machine learning modules for attack detection.
+    ├── AI-agent1/                # SQL Injection detection module.
+    │   └── sql_injection_detectio.py
+    ├── AI-agent2/                # XSS Attack prediction module.
+    │   └── XSS_attack_prediction.py
+    └── AI-agent3/                # Session Hijacking detection module.
+        └── session_hijacking.py
+```
 
 ## Architecture and Design
 
