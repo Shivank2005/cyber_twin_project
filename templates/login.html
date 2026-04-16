@@ -18,6 +18,15 @@
     <div class="center-wrapper">
         <div class="glass-container auth-form">
             <h2>Log In</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
             <form action="/login" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>

@@ -11,10 +11,10 @@
     <header>
         <h1>SecureX Portal</h1>
         <nav class="auth-nav">
-            <a href="#dashboard" style="color:white; text-decoration:none;">Dashboard</a>
+            <a href="#dashboard" style="color:white; text-decoration:none;">Welcome, <span style="color:#00ffcc;">{{ current_user.username }}</span></a>
             <a href="#about" style="color:white; text-decoration:none;">About</a>
             <a href="#contact" style="color:white; text-decoration:none;">Contact</a>
-            <a href="/">Logout</a>
+            <a href="/logout">Logout</a>
         </nav>
         
     </header>
@@ -240,6 +240,18 @@
         <canvas id="categoryChart"></canvas>
     </div>
 </div>
+
+    <div style="margin: 60px auto 30px auto; max-width: 1000px; text-align: center;">
+        <h3 style="color: #fff; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.5px;">Live Telemetry Stream</h3>
+        <p style="color: #888; margin-top: 10px;">Monitor inbound routing anomalies and heuristic intercepts in real time.</p>
+    </div>
+
+    <div style="max-width: 1000px; margin: 0 auto 60px auto; padding: 0 20px;">
+        <div class="glass-container" style="background: rgba(10, 10, 10, 0.85); padding: 20px; font-family: monospace; font-size: 0.9rem; height: 350px; overflow-y: auto; border: 1px solid rgba(0, 255, 204, 0.2); box-shadow: inset 0 0 20px rgba(0,0,0,0.8);" id="live-traffic-console">
+            <div style="color: #00ffcc; margin-bottom: 5px;">[SYSTEM] SecureX Telemetry Stream Initialized...</div>
+            <div style="color: #00ffcc; margin-bottom: 5px;">[SYSTEM] Binding to ingress ports 80/443... [OK]</div>
+        </div>
+    </div>
 
     <div style="margin: 60px auto 30px auto; max-width: 1000px; text-align: center;">
         <h3 style="color: #fff; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.5px;">Security Evaluation Modules</h3>
@@ -570,7 +582,75 @@ const donutChart = new Chart(ctxBar, {
 });
 
 
+// --- Live Traffic Simulator ---
+const trafficConsole = document.getElementById('live-traffic-console');
+const ips = ['192.168.1.105', '10.0.0.4', '172.16.0.45', '192.168.2.22', '10.0.0.99', '203.0.113.42', '18.144.22.1'];
+const endpoints = ['/api/v1/auth', '/users/profile', '/static/main.js', '/login', '/dashboard/data', '/graphql', '/image/logo.png'];
+const statuses = ['[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[ANOMALY - LOW]', '[CLEAN]'];
+
+function logTraffic() {
+    if(!trafficConsole) return;
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+    const ip = ips[Math.floor(Math.random() * ips.length)];
+    const endpoint = endpoints[Math.floor(Math.random() * endpoints.length)];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    
+    const line = document.createElement('div');
+    line.style.marginBottom = '4px';
+    line.innerHTML = `<span style="color:#555;">[${timeStr}]</span> <span style="color:#aaa;">INGRESS:</span> <span style="color:#fff;">${ip}</span> -> <span style="color:#ffaa00;">${endpoint}</span> `;
+    
+    const statusSpan = document.createElement('span');
+    statusSpan.innerText = status;
+    if(status.includes('CLEAN')) {
+        statusSpan.style.color = '#00ffcc';
+    } else {
+        statusSpan.style.color = '#ffaa00';
+    }
+    line.appendChild(statusSpan);
+    
+    trafficConsole.appendChild(line);
+    if (trafficConsole.children.length > 60) {
+        trafficConsole.removeChild(trafficConsole.children[0]); // keep list manageable
+    }
+    trafficConsole.scrollTop = trafficConsole.scrollHeight;
+    
+    // Recursive random interval to make the feed look organic
+    setTimeout(logTraffic, Math.random() * 800 + 200);
+}
+setTimeout(logTraffic, 500);
+
 </script>
+
+<!-- FOOTER SECTION -->
+<footer style="background: rgba(10, 10, 10, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); padding: 50px 20px 20px; font-family: 'Inter', sans-serif; margin-top: 40px;">
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 25px;">
+        
+        <!-- Logo / Branding -->
+        <div style="text-align: center;">
+            <h2 style="color: #fff; font-size: 1.8rem; margin: 0; font-weight: 800; letter-spacing: 1px;">Secure<span style="color: #00ffcc;">X</span></h2>
+            <p style="color: #777; font-size: 0.95rem; margin-top: 8px;">Next-Gen AI-Driven Cybersecurity</p>
+        </div>
+        
+        <!-- Links -->
+        <div style="display: flex; gap: 35px; flex-wrap: wrap; justify-content: center; margin: 5px 0;">
+            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#00ffcc'" onmouseout="this.style.color='#a1a1aa'">Privacy Policy</a>
+            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#ffaa00'" onmouseout="this.style.color='#a1a1aa'">Terms of Service</a>
+            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='#a1a1aa'">Compliance</a>
+            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#00ffcc'" onmouseout="this.style.color='#a1a1aa'">API Documentation</a>
+        </div>
+        
+        <!-- Copyright -->
+        <div style="width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; color: #666; font-size: 0.85rem;">
+            <span>&copy; <script>document.write(new Date().getFullYear())</script> SecureX Networks. All rights reserved.</span>
+            <span style="display: flex; gap: 15px;">
+                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">Twitter</a>
+                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">LinkedIn</a>
+                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">GitHub</a>
+            </span>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

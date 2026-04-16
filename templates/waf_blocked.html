@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 FORBIDDEN | SecureX WAF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background-image: radial-gradient(circle at 50% 50%, #2a0808, #0a0a0a); margin: 0;">
+
+    <div class="glass-container" style="max-width: 600px; text-align: center; border-top: 4px solid #ff4444; background: rgba(20, 5, 5, 0.85); box-shadow: 0 0 50px rgba(255, 68, 68, 0.2);">
+        
+        <div style="background: rgba(255, 68, 68, 0.15); width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 30px auto; border: 1px solid rgba(255, 68, 68, 0.4);">
+            <h1 style="color: #ff4444; font-size: 2.5rem; margin: 0;">!</h1>
+        </div>
+
+        <h1 style="color: #fff; font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px;">REQUEST BLOCKED</h1>
+        
+        <p style="color: #bbb; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            The SecureX Autonomous WAF intercepted a malicious payload in your request. Access to this resource has been terminated and the incident has been logged.
+        </p>
+        
+        <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: left; margin-bottom: 35px;">
+            <p style="color: #888; font-family: monospace; font-size: 0.95rem; margin: 0 0 10px 0;"><strong>THREAT SIGNATURE:</strong></p>
+            <p style="color: #ff4444; font-family: monospace; font-size: 1.1rem; margin: 0;">{{ reason }}</p>
+        </div>
+
+        <a href="/" style="display: inline-block; padding: 14px 30px; background: transparent; color: #fff; font-weight: 600; text-decoration: none; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Return to Safety</a>
+        
+    </div>
+
+</body>
+</html>

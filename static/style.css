@@ -225,3 +225,9 @@ nav a:hover {
     color: var(--primary);
     margin-bottom: 15px;
 }
+
+/* Flash Messages */
+.flash-messages { margin-bottom: 20px; }
+.flash-message { padding: 12px; border-radius: 8px; font-weight: 600; text-align: center; margin-bottom: 10px; }
+.flash-message.danger { background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; }
+.flash-message.success { background: rgba(0, 255, 204, 0.1); border: 1px solid #00ffcc; color: #00ffcc; }
