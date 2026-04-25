@@ -7,48 +7,120 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>SecureX Hub</h1>
-        <nav class="auth-nav">
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
+    <header class="navbar">
+        <div class="nav-brand">
+            Secure<span class="text-gradient-primary">X</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/login" class="nav-link">Login</a>
         </nav>
     </header>
 
-    <div class="center-wrapper">
-        <div class="glass-container auth-form">
-            <h2>Create Access Key</h2>
+    <div class="auth-wrapper">
+        <div class="card-glass auth-card" style="max-width: 460px;">
+            <!-- Logo / Header -->
+            <div class="text-center mb-8">
+                <div style="width: 56px; height: 56px; background: rgba(139,92,246,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; border: 1px solid rgba(139,92,246,0.2);">
+                    <svg width="24" height="24" fill="none" stroke="var(--brand-purple)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                </div>
+                <h1 style="font-size: 1.75rem; margin-bottom: 0.25rem;">Create Account</h1>
+                <p class="text-sm text-secondary">Provision your SecureX platform access</p>
+            </div>
+
+            <!-- Flash Messages -->
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
-                <div class="flash-messages">
-                  {% for category, message in messages %}
-                    <div class="flash-message {{ category }}">{{ message }}</div>
-                  {% endfor %}
-                </div>
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}" style="margin-bottom: 1rem;">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      {{ message }}
+                  </div>
+                {% endfor %}
               {% endif %}
             {% endwith %}
+
+            <!-- Form -->
             <form action="/register" method="POST">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Choose a secure username" required>
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Choose a secure username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Create a strong password" required oninput="checkStrength(this.value)" autocomplete="new-password">
                 </div>
 
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                <!-- Password Strength Meter -->
+                <div style="margin-bottom: 1.5rem;">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-secondary">Password Strength</span>
+                        <span id="strength-label" class="text-xs" style="font-weight: 600; color: var(--text-muted);">—</span>
+                    </div>
+                    <div style="background: var(--bg-surface-raised); border-radius: 4px; height: 5px; overflow: hidden;">
+                        <div id="strength-bar" style="height: 100%; width: 0%; border-radius: 4px; transition: all 0.3s ease;"></div>
+                    </div>
+                    <div style="margin-top: 0.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+                        <div id="req-len" class="text-xs" style="color: var(--text-muted);">✗ Min 8 characters</div>
+                        <div id="req-upper" class="text-xs" style="color: var(--text-muted);">✗ Uppercase letter</div>
+                        <div id="req-lower" class="text-xs" style="color: var(--text-muted);">✗ Lowercase letter</div>
+                        <div id="req-num" class="text-xs" style="color: var(--text-muted);">✗ Number</div>
+                        <div id="req-special" class="text-xs" style="color: var(--text-muted);">✗ Special character</div>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
-                </div>
-
-                <button type="submit" class="btn-primary">Provision Account</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1rem;">
+                    Provision Account
+                </button>
             </form>
-            <div class="footer-link">
-                <p>Already provisioned? <a href="/login">Login here</a></p>
-            </div>
+
+            <p class="text-sm text-secondary text-center mt-4">
+                Already provisioned? <a href="/login" style="color: var(--brand-accent); font-weight: 600;">Login here</a>
+            </p>
         </div>
     </div>
+
+<script>
+function checkStrength(pw) {
+    let score = 0;
+    const checks = {
+        len: pw.length >= 8,
+        upper: /[A-Z]/.test(pw),
+        lower: /[a-z]/.test(pw),
+        num: /[0-9]/.test(pw),
+        special: /[^A-Za-z0-9]/.test(pw)
+    };
+
+    Object.values(checks).forEach(v => { if(v) score++; });
+
+    function setReq(id, pass) {
+        const el = document.getElementById(id);
+        el.style.color = pass ? 'var(--color-success)' : 'var(--text-muted)';
+        el.textContent = (pass ? '✓ ' : '✗ ') + el.textContent.substring(2);
+    }
+    setReq('req-len', checks.len);
+    setReq('req-upper', checks.upper);
+    setReq('req-lower', checks.lower);
+    setReq('req-num', checks.num);
+    setReq('req-special', checks.special);
+
+    const bar = document.getElementById('strength-bar');
+    const label = document.getElementById('strength-label');
+    const pct = (score / 5) * 100;
+    bar.style.width = pct + '%';
+
+    if (pw.length === 0) { bar.style.width = '0%'; label.textContent = '—'; label.style.color = 'var(--text-muted)'; return; }
+
+    if (score <= 1) { bar.style.background = 'var(--color-danger)'; label.textContent = 'Weak'; label.style.color = 'var(--color-danger)'; }
+    else if (score <= 2) { bar.style.background = 'var(--color-warning)'; label.textContent = 'Fair'; label.style.color = 'var(--color-warning)'; }
+    else if (score <= 3) { bar.style.background = 'var(--color-warning)'; label.textContent = 'Good'; label.style.color = 'var(--color-warning)'; }
+    else if (score <= 4) { bar.style.background = 'var(--color-success)'; label.textContent = 'Strong'; label.style.color = 'var(--color-success)'; }
+    else { bar.style.background = 'var(--brand-accent)'; label.textContent = 'Excellent'; label.style.color = 'var(--brand-accent)'; }
+}
+</script>
 </body>
 </html>

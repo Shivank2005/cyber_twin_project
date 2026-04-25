@@ -1,162 +1,290 @@
-# CyberX-AI-Digital-Twin
+# 🛡️ CyberX AI Digital Twin — SecureX
 
-## Project Overview
+> **An AI-powered cybersecurity platform that functions as an autonomous digital twin for real-time threat detection, classification, and neutralization.**
 
-CyberX-AI-Digital-Twin is an integrated cybersecurity digital twin platform designed to simulate, detect, and analyze various cyber attack vectors. It allows cybersecurity researchers, developers, and educational institutions to test and validate security protocols in a fully isolated digital replica of their network environment. The project combines a Flask-based web application with AI/ML modules for attack detection, offering a safe environment for security testing and vulnerability assessment.
-
----
-
-## Features
-
-### User Management
-- Secure user registration and login using Flask.
-- Password hashing with bcrypt.
-- Dual storage of user credentials using MySQL and LDAP for enhanced security.
-
-### Web Interface
-- Intuitive and responsive HTML templates.
-- Dedicated pages for home, registration, and login.
-
-### Attack Detection Modules
-- **SQL Injection Detection:** Uses machine learning techniques to identify SQL injection attempts.
-- **XSS Attack Prediction:** Implements ensemble learning methods (Random Forest, Gradient Boosting, and XGBoost) to forecast cross-site scripting (XSS) attacks.
-- **Session Hijacking Detection:** Leverages natural language processing (using BERT) on network logs to simulate and detect session hijacking attempts.
-
-### Digital Twin-Based Attack Simulation
-
-**Phase 1: Digital Twin Setup**
-- Configure network security layers, including firewalls, IDS/IPS, and network segmentation.
-- Isolate and validate the digital twin environment from production networks.
-- Optimize network traffic patterns and latency settings.
-- Virtualize servers, databases, and network devices for replicating real-world conditions.
-
-**Phase 2: AI/ML-Driven Attack Model Training**
-- Collect historical and novel attack data from trusted sources (e.g., MITRE ATT&CK, CVE databases).
-- Preprocess, label, and structure data for model training.
-- Develop and train AI/ML models to simulate various cyberattacks (e.g., phishing, malware injection, DDoS).
-
-**Phase 3: Attack Simulation & Vulnerability Assessment**
-- Execute simulated attack scenarios on the digital twin.
-- Perform automated vulnerability scans and penetration tests.
-- Capture data on system resilience and breach impacts.
-
-**Phase 4: Insights & Recommendations**
-- Generate actionable security insights and update remediation strategies.
-- Implement automated remediation and define critical assets for continuous monitoring.
-
-### Extensibility
-- Modular design separating web functionalities from AI-agent detection modules.
-- Clear structure enables the addition of new modules or enhancement of existing ones with minimal integration efforts.
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 ---
 
-## Installation and Setup
+## 📋 Table of Contents
 
-### Prerequisites
-- Python 3.8 or later
-- MySQL Server
-- LDAP Server (for authentication)
-- pip package manager
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
 
-### Dependencies
+---
 
-Install the required Python packages:
-```bash
-pip install Flask mysql-connector-python ldap3 bcrypt scikit-learn xgboost imbalanced-learn pandas transformers torch
+## 🔍 Overview
+
+SecureX is a full-stack cybersecurity digital twin that combines **three AI/ML models**, an **active Web Application Firewall (WAF)**, **persistent threat analytics**, and a **premium B2B SaaS dashboard** into a single unified platform.
+
+It doesn't just simulate — it **actively defends** against real SQL injection and XSS attacks on its own endpoints, logs every incident to a MySQL database, and provides enterprise-grade analytics and reporting.
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication & Security
+| Feature | Description |
+|---------|-------------|
+| **Bcrypt Password Hashing** | All passwords stored with bcrypt salted hashes — zero plain-text storage |
+| **Flask-Login Sessions** | Session-based authentication with `@login_required` route protection |
+| **Dual Directory Storage** | User credentials synced to both MySQL and LDAP (OpenLDAP via Docker) |
+| **Session Timeout** | Auto-logout after 15 minutes of inactivity |
+| **Brute Force Protection** | 5 failed login attempts in 60 seconds triggers auto-lockout + CRITICAL log |
+| **Password Strength Meter** | Real-time JS validation (length, uppercase, lowercase, numbers, special chars) |
+| **Role-Based Access** | Admin panel restricted to configured admin users only |
+
+### 🛡️ Active Web Application Firewall (WAF)
+The `@app.before_request` middleware intercepts **every HTTP request** and scans all URL parameters and form data against the AI detection engine.
+
+**If a threat is detected:**
+- Connection is instantly killed → `403 FORBIDDEN` page
+- Incident logged to `threat_logs` with severity `CRITICAL`
+- Email alert sent to configured administrators
+
+**Attack signatures detected:** `OR 1=1`, `DROP TABLE`, `UNION SELECT`, `--`, `xp_cmdshell`, `information_schema`, `<script>`, `javascript:`, `onerror=`, `onload=`, `document.cookie`, `alert(`
+
+### 🤖 AI Threat Detection Models
+
+| Agent | Target | Method | Dataset |
+|-------|--------|--------|---------|
+| **Agent 1** | SQL Injection | Pattern-matching engine | `advanced_generated_sql_injections.csv` |
+| **Agent 2** | XSS Attacks | Pre-trained Random Forest (`.pkl`) | `Data_66_featurs.csv` (20MB, 66 features) |
+| **Agent 3** | Session Hijacking | Random Forest + CountVectorizer | `LDAP.csv` (network flow data) |
+
+All models use **lazy caching** — loaded once into memory, subsequent requests resolve instantly.
+
+### 📊 Dashboard & Analytics
+- **Real-time status cards** — Network Status, Intercepted Threats, Defense Readiness
+- **Line chart** — "Detections Over Time" with ticking animation engine
+- **Doughnut chart** — Threat distribution by category (SQL/XSS/Session)
+- **Live Telemetry Console** — Scrolling monospace feed simulating real-time traffic monitoring
+- **Custom Payload Scanner** — Type any string to instantly test it against the AI engine
+
+### 📋 Enterprise Features
+| Feature | Route | Description |
+|---------|-------|-------------|
+| **Threat Audit Log** | `/threats` | Full incident table with severity badges, bar + doughnut charts |
+| **CSV Report Export** | `/export` | One-click download of `securex_threat_report.csv` |
+| **Admin Panel** | `/admin` | User management, system stats, recent threats, API docs |
+| **REST API** | `/api/v1/scan` | JSON API for external payload scanning (SaaS model) |
+| **Email Alerts** | Automatic | SMTP notifications on CRITICAL threat detection |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Python 3.10+, Flask, Flask-Login |
+| **Database** | MySQL 8.0 |
+| **Directory** | OpenLDAP (Docker) |
+| **ML/AI** | Scikit-learn, Pandas, NumPy, Joblib |
+| **Security** | bcrypt, WAF middleware, rate limiting |
+| **Frontend** | HTML5, CSS3 (Glassmorphism), Chart.js |
+| **Config** | python-dotenv |
+
+---
+
+## 🏗️ Architecture
+
+```
+Browser ──► WAF Middleware ──► Route Handler ──► AI Agents ──► MySQL
+                │                                                │
+                ├── THREAT → 403 Block Page + DB Log + Email     │
+                │                                                │
+                └── CLEAN → Dashboard UI ◄── Chart.js ◄──────────┘
 ```
 
-### Configuration
-
-**MySQL and LDAP Settings:**  
-In `app.py`, update the following configuration objects with your server details:
-- `db_config` — MySQL details: host, user, password, database
-- LDAP configuration parameters: `ldap_server`, `ldap_user_dn`, `ldap_password`, `ldap_base_dn`
-
-**Dataset Paths:**  
-For the machine learning modules found in `/models/AI-agent1`, `/models/AI-agent2`, and `/models/AI-agent3`, update the dataset file paths as needed based on your environment.
-
 ---
 
-## Running the Application
+## 🚀 Installation
 
-Start the Flask server by executing:
+### Prerequisites
+- Python 3.10+
+- MySQL Server 8.0+
+- Docker (for OpenLDAP)
+
+### Setup
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/Shivank2005/cyber_twin_project.git
+cd cyber_twin_project
+
+# 2. Create virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS/Linux
+
+# 3. Install dependencies
+pip install flask flask-login mysql-connector-python ldap3 bcrypt python-dotenv scikit-learn pandas numpy joblib
+
+# 4. Configure environment
+copy .env.example .env
+# Edit .env with your MySQL/LDAP credentials
+
+# 5. Start MySQL and create database
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS cyberx;"
+
+# 6. Start LDAP (Docker)
+docker run -d --name openldap \
+  -p 389:389 \
+  -e LDAP_ORGANISATION="CyberX" \
+  -e LDAP_DOMAIN="cyberx.local" \
+  -e LDAP_ADMIN_PASSWORD="admin" \
+  osixia/openldap:latest
+
+# 7. Run the application
 python app.py
 ```
 
-The application will listen on `http://0.0.0.0:8080`. Open this address in your browser to access the system.
+The app will be available at **http://127.0.0.1:5001**
 
 ---
 
-## Usage
+## 🔧 Environment Variables
 
-### Web Interface
-- **Homepage** (`/`): Provides the landing and organizational overview.
-- **Registration** (`/register`): Allows users to create a new account. The flow includes password hashing and storage in both MySQL and LDAP.
-- **Login** (`/login`): Users authenticate via LDAP where the provided password is validated against the stored, hashed password.
-
-### Attack Simulation & Detection
-Each machine learning module (SQL Injection, XSS Attack Prediction, Session Hijacking) includes scripts for data preprocessing, model training, evaluation, and feature importance analysis. Run these scripts individually (via terminal or Jupyter Notebook) to train models or evaluate current system vulnerabilities.
-
----
-
-## Project Structure
-```
-CyberX-AI-Digital-Twin-main/
-├── app.py                        # Main Flask app; handles routing, user registration/login with MySQL and LDAP.
-├── README.md                     # Project documentation.
-├── templates/                    # HTML templates for the web interface.
-│   ├── index.html                # Landing page.
-│   ├── home.html                 # Home/Secure page.
-│   ├── login.html                # Login page.
-│   └── register.html             # Registration page.
-└── models/                       # Machine learning modules for attack detection.
-    ├── AI-agent1/                # SQL Injection detection module.
-    │   └── sql_injection_detectio.py
-    ├── AI-agent2/                # XSS Attack prediction module.
-    │   └── XSS_attack_prediction.py
-    └── AI-agent3/                # Session Hijacking detection module.
-        └── session_hijacking.py
-```
-
-## Architecture and Design
-
-### Backend
-- Developed using Flask for handling HTTP requests and rendering HTML templates.
-- Implements dual authentication storage via MySQL and LDAP.
-
-### Security & Data Integrity
-- Utilizes bcrypt for secure password hashing.
-- Incorporates proper error handling for database and LDAP operations.
-
-### AI Modules
-- Each module leverages modern ML frameworks (scikit-learn, XGBoost, and transformers) for simulating and detecting various cyberattacks.
-- Modular design allows independent execution and testing of each attack simulation phase.
-
-### Digital Twin Integration
-- Phased approach replicates a real-world network environment safely in an isolated setting.
-- Supports a continuous feedback loop where outcomes drive AI model re-training and system configuration enhancements.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DB_HOST` | Yes | MySQL server hostname |
+| `DB_USER` | Yes | MySQL username |
+| `DB_PASSWORD` | Yes | MySQL password |
+| `DB_NAME` | Yes | Database name |
+| `LDAP_SERVER` | Yes | LDAP server URL |
+| `LDAP_USER_DN` | Yes | LDAP admin DN |
+| `LDAP_PASSWORD` | Yes | LDAP admin password |
+| `LDAP_BASE_DN` | Yes | LDAP base DN |
+| `FLASK_SECRET_KEY` | Yes | Flask session encryption key |
+| `ADMIN_USERS` | No | Comma-separated admin usernames |
+| `SMTP_SERVER` | No | SMTP server for email alerts |
+| `SMTP_PORT` | No | SMTP port (default: 587) |
+| `SMTP_USER` | No | SMTP username |
+| `SMTP_PASS` | No | SMTP password / app password |
+| `ALERT_EMAIL` | No | Email to receive threat alerts |
 
 ---
 
-## Testing and Contribution Guidelines
+## 📖 Usage
 
-### Testing
+### Dashboard
+1. Register at `/register` → Login at `/login`
+2. Dashboard shows real-time charts, telemetry, and threat metrics
+3. Use the **Payload Scanner** to test any string against the AI engine
+4. Run **SQL/XSS/Session** evaluations from the Security Modules
 
-**Unit Testing:**  
-Develop unit tests to verify Flask routes and the functionality of the AI modules. Run tests using your preferred framework (e.g., pytest):
+### Testing the WAF
 ```bash
-pytest
+# This will be blocked by the WAF:
+curl -X POST http://127.0.0.1:5001/login -d "username=OR 1=1&password=test"
+# Returns: 403 FORBIDDEN + REQUEST BLOCKED page
 ```
 
-**Manual Testing:**  
-Interact with the web pages by registering, logging in, and testing error scenarios. Execute the machine learning modules to check data preprocessing and model performance.
-
-### Contribution Guidelines
-- **Reporting Issues:** Use the repository's issue tracker for bug reports or feature requests.
-- **Submitting Pull Requests:** Fork the repository, make your changes, and submit a pull request with a clear description and necessary tests. Follow the coding style and include documentation updates where applicable.
+### Admin Panel
+Access `/admin` (requires admin role) to view all users, recent threats, and system stats.
 
 ---
 
+## 📡 API Reference
 
-> Enjoy exploring CyberX-AI-Digital-Twin and contributing to the advancement of secure, AI-driven digital twin technologies!
+### Scan Payload
+```http
+POST /api/v1/scan
+Content-Type: application/json
+```
+
+**Request:**
+```json
+{
+  "payload": "SELECT * FROM users WHERE '1'='1'"
+}
+```
+
+**Response (Threat Detected):**
+```json
+{
+  "payload": "SELECT * FROM users WHERE '1'='1'",
+  "status": "THREAT_DETECTED",
+  "threats": [
+    {"type": "SQL Injection", "severity": "CRITICAL"}
+  ]
+}
+```
+
+**Response (Clean):**
+```json
+{
+  "payload": "hello world",
+  "status": "CLEAN"
+}
+```
+
+---
+
+## 📁 Project Structure
+
+```
+CyberX-AI-Digital-Twin/
+├── app.py                          # Main Flask application (all routes + WAF)
+├── .env                            # Environment variables (not committed)
+├── .env.example                    # Environment template
+├── requirements.txt                # Python dependencies
+│
+├── models/
+│   ├── AI_agent1/                  # SQL Injection Detection
+│   │   ├── sql_injection_detectio.py
+│   │   └── advanced_generated_sql_injections.csv
+│   ├── AI_agent2/                  # XSS Attack Prediction
+│   │   ├── XSS_attack_prediction.py
+│   │   ├── xss_model.pkl
+│   │   └── Data_66_featurs.csv
+│   └── AI_agent3/                  # Session Hijacking Detection
+│       ├── session_hijacking.py
+│       ├── session_model.pkl
+│       └── LDAP.csv
+│
+├── templates/
+│   ├── index.html                  # Landing page
+│   ├── login.html                  # Login with brute force protection
+│   ├── register.html               # Registration with password strength meter
+│   ├── home.html                   # Main dashboard (charts + telemetry + scanner)
+│   ├── threats.html                # Threat audit log with analytics
+│   ├── admin.html                  # Admin panel
+│   └── waf_blocked.html            # 403 WAF block page
+│
+└── static/
+    └── style.css                   # Global stylesheet (glassmorphism theme)
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Open a Pull Request
+
+---
+
+## 👤 Author
+
+**Shivank** — [@Shivank2005](https://github.com/Shivank2005)
+
+---
+
+<p align="center">
+  <b>SecureX</b> — Next-Gen AI-Driven Cybersecurity Digital Twin
+</p>

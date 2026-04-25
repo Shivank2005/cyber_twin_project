@@ -5,652 +5,454 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | SecureX</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     
-    <header>
-        <h1>SecureX Portal</h1>
-        <nav class="auth-nav">
-            <a href="#dashboard" style="color:white; text-decoration:none;">Welcome, <span style="color:#00ffcc;">{{ current_user.username }}</span></a>
-            <a href="#about" style="color:white; text-decoration:none;">About</a>
-            <a href="#contact" style="color:white; text-decoration:none;">Contact</a>
-            <a href="/logout">Logout</a>
+    <header class="navbar">
+        <div class="nav-brand">
+            Secure<span class="text-gradient-primary">X</span>
+        </div>
+        <nav class="nav-links">
+            <span class="text-secondary text-sm">Welcome, <span class="text-gradient-primary" style="font-weight: 700;">{{ current_user.username }}</span></span>
+            <a href="#dashboard" class="nav-link">Dashboard</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="/threats" class="nav-link">Audit Log</a>
+            {% if is_admin %}
+            <a href="/admin" class="nav-link">Admin</a>
+            {% endif %}
+            <a href="/logout" class="btn btn-outline" style="padding: 0.4rem 1rem; margin-left: 1rem;">Logout</a>
         </nav>
-        
     </header>
 
-    <div id="about" style="max-width: 1150px; margin: 80px auto; padding: 20px; font-family: 'Inter', sans-serif;">
-        <!-- Title -->
-        <div style="text-align: center; margin-bottom: 70px;">
-            <h2 style="font-size: 3rem; color: #fff; margin-bottom: 15px; display: inline-block; position: relative; font-weight: 800; letter-spacing: 1px;">
-                About SecureX
-                <div style="position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: #00ffcc; border-radius: 2px; box-shadow: 0 0 15px #00ffcc;"></div>
-            </h2>
-            <p style="color: #aaa; margin-top: 40px; font-size: 1.2rem; max-width: 850px; margin-inline: auto; line-height: 1.8;">
-                SecureX represents the pinnacle of AI-driven cybersecurity orchestration. Engineered as a highly scalable digital twin, it performs continuous, low-latency telemetry analysis to instantaneously detect, classify, and neutralize malicious ingress. By harnessing live streaming data and predictive heuristics, SecureX bridges the gap between static rule-based firewalls and autonomous threat intelligence.
-            </p>
-        </div>
+    <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+        
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="mb-12">
+            <div class="text-center mb-8">
+                <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;" class="text-gradient">Command Dashboard</h2>
+                <p class="text-secondary">Real-time telemetry, threat intercept status, and automated countermeasures.</p>
+            </div>
 
-        <!-- Modules Section (Grid Layout) -->
-        <div style="margin-bottom: 40px; text-align: center;">
-            <h3 style="color: #ffaa00; font-size: 1.7rem; display: inline-flex; align-items: center; gap: 12px; font-weight: 700;">
-                <span style="background: rgba(255, 170, 0, 0.15); padding: 10px; border-radius: 12px; font-size: 1.3rem;">⚡</span> Real-Time Threat Interception Modules
-            </h3>
-            <p style="color: #888; margin-top: 10px; font-size: 1.05rem;">Operating at < 10ms analytical latency across full-stack traffic streams.</p>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; margin-bottom: 80px;">
+            <!-- Status Cards -->
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="card-glass stat-card accent-cyan">
+                    <div class="stat-label flex items-center justify-between">
+                        Network Status
+                        <span class="pulse-indicator"><span class="animate-ping bg-brand-accent"></span><span class="relative bg-brand-accent"></span></span>
+                    </div>
+                    <div class="stat-value">Active</div>
+                </div>
+
+                <div class="card-glass stat-card accent-warning">
+                    <div class="stat-label">Intercepted Threats</div>
+                    <div class="stat-value" style="color: var(--color-warning);">{{ threat_count }}</div>
+                </div>
+
+                <div class="card-glass stat-card accent-danger">
+                    <div class="stat-label">Defense Readiness</div>
+                    <div class="stat-value text-gradient-purple">Shielded</div>
+                </div>
+            </div>
             
-            <div class="glass-container" style="padding: 35px; border-top: 4px solid #00ffcc; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: default; background: rgba(10, 10, 10, 0.7);" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0, 255, 204, 0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px 0 rgba(0, 0, 0, 0.5)';">
-                <h4 style="color: #fff; margin-bottom: 15px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                    <span style="color: #00ffcc; font-family: monospace;">[01]</span> Deep-Packet SQLi Detection
-                </h4>
-                <p style="color: #bbb; line-height: 1.7; font-size: 1rem;">Intercepts sophisticated query mutations instantly. By autonomously tokenizing network requests, the AI engine prevents highly obfuscated SQL injections, thwarting zero-day auth bypass attempts and systemic database scraping.</p>
-            </div>
-
-            <div class="glass-container" style="padding: 35px; border-top: 4px solid #ffaa00; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: default; background: rgba(10, 10, 10, 0.7);" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255, 170, 0, 0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px 0 rgba(0, 0, 0, 0.5)';">
-                <h4 style="color: #fff; margin-bottom: 15px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                    <span style="color: #ffaa00; font-family: monospace;">[02]</span> Autonomous XSS Shield
-                </h4>
-                <p style="color: #bbb; line-height: 1.7; font-size: 1rem;">Evaluates DOM interactions and inbound parameters in real-time. Identifies and nullifies emergent, polymorphic JavaScript payloads aimed at capturing active session cookies, deploying rogue web-workers, or hijacking client UI flows.</p>
-            </div>
-
-            <div class="glass-container" style="padding: 35px; border-top: 4px solid #ff4444; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: default; background: rgba(10, 10, 10, 0.7);" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(255, 68, 68, 0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px 0 rgba(0, 0, 0, 0.5)';">
-                <h4 style="color: #fff; margin-bottom: 15px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                    <span style="color: #ff4444; font-family: monospace;">[03]</span> Session Drift Analysis
-                </h4>
-                <p style="color: #bbb; line-height: 1.7; font-size: 1rem;">Continuously monitors latent network behavior, cryptographic token entropy, and user-agent signatures. Instantly identifies anomalous session drift, sudden foreign IP triangulation, and complex spoofed traffic injections.</p>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 40px; margin-bottom: 80px;">
-            <!-- Features -->
-            <div style="background: rgba(15, 15, 15, 0.8); padding: 45px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.1); backdrop-filter: blur(15px); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);">
-                <h3 style="color: #00ffcc; margin-bottom: 35px; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; font-weight: 700;">
-                    <span style="background: rgba(0, 255, 204, 0.15); padding: 12px; border-radius: 12px;">🚀</span> Next-Gen Analytics Core
-                </h3>
-                <ul style="list-style: none; padding: 0; margin: 0; color: #aaa; line-height: 1.5; font-size: 0.95rem;">
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Multi-Model Intelligence</b> 
-                            Parallel scoring via Random Forest & XGBoost.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Isolated Sandbox Testing</b> 
-                            Active vulnerability validation against safe targets.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Adaptive Thresholds</b> 
-                            Dynamic defense escalation based on live metrics.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Forensic Telemetry</b> 
-                            Millisecond-precision logging for attack vectors.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">API-First Edge Scalability</b> 
-                            Modular backends for instant enterprise deployment.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Zero-Day Interception</b> 
-                            Heuristic anomaly detection for emerging, unclassified exploits.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Encrypted Payload Parsing</b> 
-                            Deep packet inspection to identify obfuscated SSL/TLS threats.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Automated Fast-Response</b> 
-                            Instant algorithmic counter-measures deployed without human delay.
-                        </div>
-                    </li>
-                    <li style="display: flex; align-items: flex-start; gap: 15px;">
-                        <span style="color:#00ffcc; font-size: 1.2rem; margin-top: 2px;">✓</span> 
-                        <div>
-                            <b style="color:#fff; font-size: 1.05rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px;">Cloud-Native Synapse</b> 
-                            Seamless security fabric bridging AWS, Azure, and GCP infrastructure.
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Advantages & Tech Stack -->
-            <div style="display: flex; flex-direction: column; gap: 35px;">
-                <div style="background: rgba(15, 15, 15, 0.8); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,170,0,0.1); backdrop-filter: blur(15px); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);">
-                    <h3 style="color: #ffaa00; margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; font-weight: 700;">
-                        <span style="background: rgba(255, 170, 0, 0.15); padding: 12px; border-radius: 12px;">🏆</span> The Enterprise Advantage
-                    </h3>
-                    <p style="color: #bbb; line-height: 1.9; font-size: 1.05rem; margin-bottom: 0;">
-                        SecureX isn't just a reactive tool; it is a live, proactive shield. By implementing federated learning principles, it drastically minimizes the demand for manual SOC (Security Operations Center) oversight. Engineered for high-throughput environments, it centralizes heavily obfuscated, multi-vector attacks into one holistic intelligence panel.
-                    </p>
+            <!-- Charts -->
+            <div class="grid grid-cols-2 gap-6 mb-8">
+                <div class="card-glass">
+                    <h3 class="text-sm text-secondary mb-4 uppercase" style="letter-spacing: 1px;">📈 Detections Over Time</h3>
+                    <div style="position: relative; height: 220px; width: 100%;">
+                        <canvas id="attackChart"></canvas>
+                    </div>
                 </div>
                 
-                <div style="background: rgba(15, 15, 15, 0.8); padding: 40px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.1); backdrop-filter: blur(15px); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);">
-                    <h3 style="color: #00ffcc; margin-bottom: 25px; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; font-weight: 700;">
-                        <span style="background: rgba(0, 255, 204, 0.15); padding: 12px; border-radius: 12px;">⚙️</span> Technology Stack
-                    </h3>
-                    <ul style="list-style: none; padding: 0; margin: 0; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Frontend:</b>
-                            <span>HTML5, CSS3 (Custom UI Design)</span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Backend:</b>
-                            <span>Flask (Python Web Framework)</span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Language:</b>
-                            <span>Python</span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Machine Learning:</b>
-                            <span>Scikit-learn </span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Data Processing:</b>
-                            <span>Pandas, NumPy</span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Auth Systems:</b>
-                            <span>MySQL, LDAP (OpenLDAP via Docker)</span>
-                        </li>
-                        <li style="padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <b style="color:#fff; margin-right: 8px;">Security Models:</b>
-                            <span>SQL Injection Detection, XSS Detection, Session Hijacking Detection</span>
-                        </li>
-                        <li style="padding: 14px 0;">
-                            <b style="color:#fff; margin-right: 8px;">Deployment:</b>
-                            <span>Flask Server</span>
-                        </li>
-                    </ul>
+                <div class="card-glass">
+                    <h3 class="text-sm text-secondary mb-4 uppercase" style="letter-spacing: 1px;">🍩 Threats by Category</h3>
+                    <div style="position: relative; height: 220px; width: 100%;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Final Banner -->
-        <div style="background: linear-gradient(135deg, rgba(0,255,204,0.15) 0%, rgba(255,170,0,0.1) 50%, rgba(255,68,68,0.15) 100%); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h4 style="color: #fff; font-size: 1.6rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 1px;">The SecureX Neural Edge</h4>
-            <p style="color: #ddd; font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.7;">Spearheading the future of scalable, real-time autonomous defense against the next generation of cybersecurity vulnerabilities.</p>
-        </div>
-    </div>
-
-<div id="dashboard" style="padding-top: 80px;">
-    <!-- Welcome Section -->
-    <div style="text-align: center; margin-bottom: 50px;">
-        <h2 style="font-size: 2.8rem; color: #fff; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px;">Command Dashboard</h2>
-        <p style="color: #999; font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
-            Real-time telemetry, threat intercept status, and automated countermeasure deployments.
-        </p>
-    </div>
-
-    <!-- Status Cards Section -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1000px; margin: 0 auto 50px auto; padding: 0 20px;">
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border-top: 3px solid #00ffcc;">
-            <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Network Status</h4>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 10px; height: 10px; background: #00ffcc; border-radius: 50%; box-shadow: 0 0 10px #00ffcc;"></div>
-                <span style="color: #fff; font-size: 1.8rem; font-weight: 600;">Active</span>
+            <!-- Live Telemetry -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 style="font-size: 1.25rem;">Live Telemetry Stream</h3>
+                    <span class="badge badge-info">Monitoring Ingress</span>
+                </div>
+                <div class="terminal-window" id="live-traffic-console">
+                    <div class="terminal-line" style="color: var(--brand-accent);">[SYSTEM] SecureX Telemetry Stream Initialized...</div>
+                    <div class="terminal-line" style="color: var(--brand-accent);">[SYSTEM] Binding to ingress ports 80/443... [OK]</div>
+                </div>
             </div>
-        </div>
 
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border-top: 3px solid #ffaa00;">
-            <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Intercepted Threats</h4>
-            <div style="color: #fff; font-size: 1.8rem; font-weight: 600;">
-                {{ threat_count }}
+            <!-- Payload Scanner -->
+            <div class="card-glass mb-12">
+                <div class="mb-6 text-center">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Payload Scanner</h3>
+                    <p class="text-secondary text-sm">Test any string against the AI threat detection engine in real-time.</p>
+                </div>
+                
+                <form method="POST" action="/scan#dashboard" class="flex gap-4">
+                    <input type="text" name="payload" placeholder="e.g.  OR 1=1  or  <script>alert(1)</script>" required
+                        class="form-control font-mono" style="flex: 1;"
+                        value="{{ scan_payload or '' }}">
+                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+                        <svg style="width: 1rem; height: 1rem; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        Scan Payload
+                    </button>
+                </form>
+
+                {% if show_scan %}
+                <div class="mt-6 p-4 rounded bg-surface border" style="background: var(--bg-surface-raised); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                    <div class="text-xs text-secondary mb-2">Analysis Result for: <span class="font-mono text-primary">{{ scan_payload }}</span></div>
+                    {% for r in scan_results %}
+                    <div class="flex items-center gap-4 py-2" style="{% if not loop.last %}border-bottom: 1px solid var(--border-highlight);{% endif %}">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ r.color }}; box-shadow: 0 0 8px {{ r.color }};"></span>
+                        <span class="font-medium" style="flex: 1;">{{ r.type }}</span>
+                        <span class="badge" style="background: {{ r.color }}22; color: {{ r.color }}; border: 1px solid {{ r.color }}44;">{{ r.severity }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
-        </div>
 
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border-top: 3px solid #ff4444;">
-            <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Defense Readiness</h4>
-            <div style="color: #fff; font-size: 1.8rem; font-weight: 600;">Shielded</div>
-        </div>
-    </div>
-        
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <!-- Security Evaluation Modules -->
+            <div class="text-center mb-6">
+                <h3 style="font-size: 1.8rem;">Security Evaluation Modules</h3>
+                <p class="text-secondary mt-2">Run manual vulnerability assessments against your active environment.</p>
+            </div>
 
-<div style="display:flex; justify-content:center; gap:30px; margin-bottom:40px; flex-wrap:wrap; max-width: 1000px; margin-inline: auto;">
-    <div class="glass-container" style="padding: 20px; width: 450px; background: rgba(17, 17, 17, 0.7);">
-        <h3 style="color:#00ffcc; text-align:center; font-size:18px; margin-bottom:15px;">Detections Over Time</h3>
-        <canvas id="attackChart"></canvas>
-    </div>
-    
-    <div class="glass-container" style="padding: 20px; width: 450px; background: rgba(17, 17, 17, 0.7);">
-        <h3 style="color:#ffaa00; text-align:center; font-size:18px; margin-bottom:15px;">Threats by Category</h3>
-        <canvas id="categoryChart"></canvas>
-    </div>
-</div>
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <!-- SQL CARD -->
+                <div class="card-glass stat-card accent-cyan">
+                    <h3 class="mb-2">SQL Injection</h3>
+                    <p class="text-sm text-secondary mb-6">Evaluate defenses against SQL injection vulnerability exploits.</p>
 
-    <div style="margin: 60px auto 30px auto; max-width: 1000px; text-align: center;">
-        <h3 style="color: #fff; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.5px;">Live Telemetry Stream</h3>
-        <p style="color: #888; margin-top: 10px;">Monitor inbound routing anomalies and heuristic intercepts in real time.</p>
-    </div>
+                    <form method="POST" action="/sql#dashboard">
+                        <button type="submit" class="btn btn-outline" style="width: 100%; border-color: var(--brand-accent); color: var(--brand-accent);" {% if show_table %} style="display:none;" {% endif %}>
+                            Run Evaluation
+                        </button>
+                    </form>
+                    {% if show_table %}
+                        <div class="mt-2 text-center text-sm" style="color: var(--brand-accent); padding: 0.5rem; background: rgba(6, 182, 212, 0.1); border-radius: var(--radius-md);">
+                            ● Evaluation Complete
+                        </div>
+                    {% endif %}
+                </div>
 
-    <div style="max-width: 1000px; margin: 0 auto 60px auto; padding: 0 20px;">
-        <div class="glass-container" style="background: rgba(10, 10, 10, 0.85); padding: 20px; font-family: monospace; font-size: 0.9rem; height: 350px; overflow-y: auto; border: 1px solid rgba(0, 255, 204, 0.2); box-shadow: inset 0 0 20px rgba(0,0,0,0.8);" id="live-traffic-console">
-            <div style="color: #00ffcc; margin-bottom: 5px;">[SYSTEM] SecureX Telemetry Stream Initialized...</div>
-            <div style="color: #00ffcc; margin-bottom: 5px;">[SYSTEM] Binding to ingress ports 80/443... [OK]</div>
-        </div>
-    </div>
+                <!-- XSS CARD -->
+                <div class="card-glass stat-card accent-warning">
+                    <h3 class="mb-2">Cross-Site Scripting</h3>
+                    <p class="text-sm text-secondary mb-6">Test application resilience against Cross-Site Scripting.</p>
 
-    <div style="margin: 60px auto 30px auto; max-width: 1000px; text-align: center;">
-        <h3 style="color: #fff; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.5px;">Security Evaluation Modules</h3>
-        <p style="color: #888; margin-top: 10px;">Run manual vulnerability assessments against your active environment.</p>
-    </div>
+                    <form method="POST" action="/xss#dashboard">
+                        <button type="submit" class="btn btn-outline" style="width: 100%; border-color: var(--color-warning); color: var(--color-warning);" {% if show_xss %} style="display:none;" {% endif %}>
+                            Run Evaluation
+                        </button>
+                    </form>
+                    {% if show_xss %}
+                        <div class="mt-2 text-center text-sm" style="color: var(--color-warning); padding: 0.5rem; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md);">
+                            ● Evaluation Complete
+                        </div>
+                    {% endif %}
+                </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto 60px auto; padding: 0 20px;">
-        
-        <!-- SQL CARD -->
-        <div style="background: rgba(15, 15, 15, 0.8); border: 1px solid rgba(0, 255, 204, 0.15); border-radius: 12px; padding: 30px; text-align: left; box-shadow: inset 0 0 20px rgba(0,255,204,0.05); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-            <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;">SQL Injection</h3>
-            <p style="color: #888; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;">Evaluate defenses against SQL injection vulnerability exploits.</p>
+                <!-- SESSION CARD -->
+                <div class="card-glass stat-card accent-danger">
+                    <h3 class="mb-2">Session Hijacking</h3>
+                    <p class="text-sm text-secondary mb-6">Monitor active user sessions for malicious takeover attempts.</p>
 
-            <form method="POST" action="/sql#dashboard">
-                <button type="submit"
-                    {% if show_table %} style="display:none;" {% endif %}
-                    style="width: 100%; padding: 12px; background: rgba(0, 255, 204, 0.1); border: 1px solid #00ffcc; color: #00ffcc; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#00ffcc'; this.style.color='#000';" onmouseout="this.style.background='rgba(0, 255, 204, 0.1)'; this.style.color='#00ffcc';">
-                    Run Evaluation
-                </button>
-            </form>
+                    <form method="POST" action="/session#dashboard">
+                        <button type="submit" class="btn btn-outline" style="width: 100%; border-color: var(--color-danger); color: var(--color-danger);" {% if show_session %} style="display:none;" {% endif %}>
+                            Run Evaluation
+                        </button>
+                    </form>
+                    {% if show_session %}
+                        <div class="mt-2 text-center text-sm" style="color: var(--color-danger); padding: 0.5rem; background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md);">
+                            ● Evaluation Complete
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
 
+            <!-- RESULTS SECTIONS -->
             {% if show_table %}
-                <div style="margin-top: 10px; padding: 10px; background: rgba(0, 255, 204, 0.05); border: 1px dashed #00ffcc; border-radius: 6px; color: #00ffcc; font-size: 0.95rem; font-weight: 500;">
-                    <span style="margin-right:8px;">●</span> Evaluation Complete
+            <div class="card-glass mb-8" style="border-top: 2px solid var(--brand-accent);">
+                <h3 class="mb-4" style="color: var(--brand-accent);">SQL Detection Results</h3>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Payload</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in results %}
+                            <tr>
+                                <td class="font-mono text-sm">{{ row.Payload }}</td>
+                                <td>
+                                    {% if "Detected" in row.Result %}
+                                        <span class="badge badge-danger">Attack</span>
+                                    {% else %}
+                                        <span class="badge badge-success">Safe</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+            </div>
             {% endif %}
-        </div>
-
-        <!-- XSS CARD -->
-        <div style="background: rgba(15, 15, 15, 0.8); border: 1px solid rgba(255, 170, 0, 0.15); border-radius: 12px; padding: 30px; text-align: left; box-shadow: inset 0 0 20px rgba(255,170,0,0.05); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-            <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;">Cross-Site Scripting</h3>
-            <p style="color: #888; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;">Test application resilience against Cross-Site Scripting.</p>
-
-            <form method="POST" action="/xss#dashboard">
-                <button type="submit"
-                    {% if show_xss %} style="display:none;" {% endif %}
-                    style="width: 100%; padding: 12px; background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; color: #ffaa00; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#ffaa00'; this.style.color='#000';" onmouseout="this.style.background='rgba(255, 170, 0, 0.1)'; this.style.color='#ffaa00';">
-                    Run Evaluation
-                </button>
-            </form>
 
             {% if show_xss %}
-                <div style="margin-top: 10px; padding: 10px; background: rgba(255, 170, 0, 0.05); border: 1px dashed #ffaa00; border-radius: 6px; color: #ffaa00; font-size: 0.95rem; font-weight: 500;">
-                    <span style="margin-right:8px;">●</span> Evaluation Complete
+            <div class="card-glass mb-8" style="border-top: 2px solid var(--color-warning);">
+                <h3 class="mb-4" style="color: var(--color-warning);">XSS Detection Results</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">Accuracy</span><span class="font-bold text-lg">{{ xss_result.accuracy }}</span></div>
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">F1 Score</span><span class="font-bold text-lg">{{ xss_result.f1_score }}</span></div>
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">Model</span><span class="font-mono text-sm text-muted mt-1 block">{{ xss_result.model }}</span></div>
                 </div>
+            </div>
             {% endif %}
-        </div>
-
-        <!-- SESSION CARD -->
-        <div style="background: rgba(15, 15, 15, 0.8); border: 1px solid rgba(255, 68, 68, 0.15); border-radius: 12px; padding: 30px; text-align: left; box-shadow: inset 0 0 20px rgba(255,68,68,0.05); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-            <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;">Session Hijacking</h3>
-            <p style="color: #888; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;">Monitor active user sessions for malicious takeover attempts.</p>
-
-            <form method="POST" action="/session#dashboard">
-                <button type="submit"
-                    {% if show_session %} style="display:none;" {% endif %}
-                    style="width: 100%; padding: 12px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#ff4444'; this.style.color='#000';" onmouseout="this.style.background='rgba(255, 68, 68, 0.1)'; this.style.color='#ff4444';">
-                    Run Evaluation
-                </button>
-            </form>
 
             {% if show_session %}
-                <div style="margin-top: 10px; padding: 10px; background: rgba(255, 68, 68, 0.05); border: 1px dashed #ff4444; border-radius: 6px; color: #ff4444; font-size: 0.95rem; font-weight: 500;">
-                    <span style="margin-right:8px;">●</span> Evaluation Complete
+            <div class="card-glass mb-8" style="border-top: 2px solid var(--color-danger);">
+                <h3 class="mb-4" style="color: var(--color-danger);">Session Monitoring Results</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">Accuracy</span><span class="font-bold text-lg">{{ session_result.accuracy }}</span></div>
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">F1 Score</span><span class="font-bold text-lg">{{ session_result.f1_score }}</span></div>
+                    <div class="p-4 bg-surface rounded"><span class="text-xs text-secondary block uppercase">Model</span><span class="font-mono text-sm text-muted mt-1 block">{{ session_result.model }}</span></div>
                 </div>
+            </div>
             {% endif %}
-        </div>
-    </div>
 
-{% if show_table %}
-<div style="
-    max-width:1000px;
-    margin:40px auto;
-    padding:20px;
-    background:#111;
-    border-radius:10px;
-    box-shadow:0 0 15px #00ffcc;
-">
+        </section>
 
-    <h3 style="color:#00ffcc; margin-bottom:15px;">
-        SQL Detection Results
-    </h3>
-
-    <table style="
-        width:100%;
-        border-collapse:collapse;
-        color:white;
-    ">
-
-        <tr style="background:#00ffcc; color:black;">
-            <th style="padding:10px;">Payload</th>
-            <th style="padding:10px;">Result</th>
-        </tr>
-
-        {% for row in results %}
-        <tr style="border-bottom:1px solid #333;">
-            <td style="padding:10px;">{{ row.Payload }}</td>
-            <td style="padding:10px;">
-                {% if "Detected" in row.Result %}
-                    <span style="color:red;">🚨 Attack</span>
-                {% else %}
-                    <span style="color:lightgreen;">✅ Safe</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-
-    </table>
-
-</div>
-{% endif %}
-
-{% if show_xss %}
-
-<div style="
-    max-width:900px;
-    margin:30px auto;
-    padding:20px;
-    background:#111;
-    border-radius:10px;
-    box-shadow:0 0 15px #ffaa00;
-">
-
-    <h3 style="color:#ffaa00;">XSS Detection Results</h3>
-
-    <p><b>Accuracy:</b> {{ xss_result.accuracy }}</p>
-    <p><b>F1 Score:</b> {{ xss_result.f1_score }}</p>
-    <p><b>Model:</b> {{ xss_result.model }}</p>
-
-</div>
-
-{% endif %}
-
-{% if show_session %}
-
-<div style="
-    max-width:900px;
-    margin:30px auto;
-    padding:20px;
-    background:#111;
-    border-radius:10px;
-    box-shadow:0 0 15px #ff4444;
-">
-
-    <h3 style="color:#ff4444;">Session Monitoring Results</h3>
-
-    <p><b>Accuracy:</b> {{ session_result.accuracy }}</p>
-    <p><b>F1 Score:</b> {{ session_result.f1_score }}</p>
-    <p><b>Model:</b> {{ session_result.model }}</p>
-
-</div>
-
-{% endif %}
-
-</div>
-
-</div>
-    </div>
-</div>
-
-<!-- CONTACT SECTION -->
-<div id="contact" style="max-width: 1000px; margin: 100px auto 80px auto; padding: 0 20px; font-family: 'Inter', sans-serif;">
-    <div style="text-align: center; margin-bottom: 50px;">
-        <h2 style="font-size: 2.5rem; color: #fff; margin-bottom: 15px; font-weight: 600; letter-spacing: -0.5px;">Contact Our Team</h2>
-        <p style="color: #999; font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
-            Whether you have questions about deployment or need technical support, our cybersecurity experts are here to help.
-        </p>
-    </div>
-
-    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; display: flex; flex-wrap: wrap; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-        
-        <!-- Left Side: Form -->
-        <div style="flex: 1; min-width: 350px; padding: 50px;">
-            <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 25px; font-weight: 500;">Send us a message</h3>
-            <form onsubmit="event.preventDefault(); alert('Message sent successfully. Our team will contact you shortly.'); this.reset();" style="display: flex; flex-direction: column; gap: 20px;">
-                <div style="display: flex; gap: 20px;">
-                    <div style="flex: 1;">
-                        <label style="display: block; color: #a1a1aa; font-size: 0.9rem; margin-bottom: 8px;">First name</label>
-                        <input type="text" required style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 12px; color: #fff; border-radius: 6px; outline: none; transition: border 0.2s;" onfocus="this.style.border='1px solid rgba(255,255,255,0.4)'" onblur="this.style.border='1px solid rgba(255,255,255,0.1)'">
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="display: block; color: #a1a1aa; font-size: 0.9rem; margin-bottom: 8px;">Last name</label>
-                        <input type="text" required style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 12px; color: #fff; border-radius: 6px; outline: none; transition: border 0.2s;" onfocus="this.style.border='1px solid rgba(255,255,255,0.4)'" onblur="this.style.border='1px solid rgba(255,255,255,0.1)'">
-                    </div>
-                </div>
-                <div>
-                    <label style="display: block; color: #a1a1aa; font-size: 0.9rem; margin-bottom: 8px;">Work email</label>
-                    <input type="email" required style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 12px; color: #fff; border-radius: 6px; outline: none; transition: border 0.2s;" onfocus="this.style.border='1px solid rgba(255,255,255,0.4)'" onblur="this.style.border='1px solid rgba(255,255,255,0.1)'">
-                </div>
-                <div>
-                    <label style="display: block; color: #a1a1aa; font-size: 0.9rem; margin-bottom: 8px;">How can we help?</label>
-                    <textarea rows="4" required style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 12px; color: #fff; border-radius: 6px; outline: none; resize: none; transition: border 0.2s;" onfocus="this.style.border='1px solid rgba(255,255,255,0.4)'" onblur="this.style.border='1px solid rgba(255,255,255,0.1)'"></textarea>
-                </div>
-                <button type="submit" style="background: #fff; color: #000; border: none; padding: 14px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px;" onmouseover="this.style.background='#e5e5e5'" onmouseout="this.style.background='#fff'">Send message</button>
-            </form>
-        </div>
-
-        <!-- Right Side: Contact Info -->
-        <div style="flex: 0.6; min-width: 300px; background: rgba(255,255,255,0.02); padding: 50px; border-left: 1px solid rgba(255,255,255,0.05);">
-            <div style="margin-bottom: 40px;">
-                <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Technical Support</h4>
-                <a href="mailto:support@securex.dev" style="color: #fff; font-size: 1.1rem; text-decoration: none; font-weight: 500;">support@securex.dev</a>
-            </div>
-
-            <div style="margin-bottom: 40px;">
-                <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Enterprise Sales</h4>
-                <a href="mailto:sales@securex.dev" style="color: #fff; font-size: 1.1rem; text-decoration: none; font-weight: 500;">sales@securex.dev</a>
-            </div>
-
-            <div style="margin-bottom: 40px;">
-                <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Call Us</h4>
-                <span style="color: #fff; font-size: 1.1rem; font-weight: 500;">+91 9876543210</span>
-            </div>
-
-            <div>
-                <h4 style="color: #a1a1aa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0;">Office Locations</h4>
-                <p style="color: #fff; font-size: 1.05rem; margin: 0; line-height: 1.6; font-weight: 500;">
-                    Cyber Tower<br>
-                    HITEC City, Hyderabad, Telangana 500081
+        <!-- ABOUT SECTION -->
+        <section id="about" class="mb-12 pt-12" style="border-top: 1px solid var(--border-color);">
+            <div class="text-center mb-12">
+                <h2 class="text-gradient" style="font-size: 3rem; margin-bottom: 1rem;">About SecureX</h2>
+                <p class="text-secondary mx-auto" style="max-width: 800px; font-size: 1.1rem;">
+                    SecureX represents the pinnacle of AI-driven cybersecurity orchestration. Engineered as a highly scalable digital twin, it performs continuous, low-latency telemetry analysis to instantaneously detect, classify, and neutralize malicious ingress.
                 </p>
             </div>
+
+            <div class="grid grid-cols-3 gap-6 mb-12">
+                <div class="card-glass" style="border-top: 3px solid var(--brand-accent);">
+                    <h4 class="flex items-center gap-2 mb-3"><span class="text-brand-accent font-mono">[01]</span> Deep-Packet SQLi</h4>
+                    <p class="text-sm text-secondary">Intercepts sophisticated query mutations instantly. By autonomously tokenizing network requests, the AI engine prevents highly obfuscated SQL injections.</p>
+                </div>
+                <div class="card-glass" style="border-top: 3px solid var(--color-warning);">
+                    <h4 class="flex items-center gap-2 mb-3"><span class="text-color-warning font-mono">[02]</span> Autonomous XSS Shield</h4>
+                    <p class="text-sm text-secondary">Evaluates DOM interactions and inbound parameters in real-time. Identifies and nullifies emergent, polymorphic JavaScript payloads.</p>
+                </div>
+                <div class="card-glass" style="border-top: 3px solid var(--color-danger);">
+                    <h4 class="flex items-center gap-2 mb-3"><span class="text-color-danger font-mono">[03]</span> Session Drift Analysis</h4>
+                    <p class="text-sm text-secondary">Continuously monitors latent network behavior, cryptographic token entropy, and user-agent signatures to identify anomalous session drift.</p>
+                </div>
+            </div>
+            
+            <div class="card-glass text-center p-8 bg-surface-raised">
+                <h4 class="text-xl mb-4 font-bold text-gradient-primary">The SecureX Neural Edge</h4>
+                <p class="text-secondary max-w-2xl mx-auto">Spearheading the future of scalable, real-time autonomous defense against the next generation of cybersecurity vulnerabilities.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer mt-auto">
+        <div class="container flex flex-col items-center gap-6">
+            <div class="text-center">
+                <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px;">Secure<span class="text-gradient-primary">X</span></h2>
+                <p class="text-sm text-secondary mt-1">Next-Gen AI-Driven Cybersecurity</p>
+            </div>
+            <div class="flex gap-6 text-sm">
+                <a href="#" class="text-secondary hover:text-primary">Privacy Policy</a>
+                <a href="#" class="text-secondary hover:text-primary">Terms of Service</a>
+                <a href="#" class="text-secondary hover:text-primary">Compliance</a>
+                <a href="#" class="text-secondary hover:text-primary">API Documentation</a>
+            </div>
+            <div class="w-full border-t border-color mt-4 pt-6 flex justify-between items-center text-xs text-muted">
+                <span>&copy; <script>document.write(new Date().getFullYear())</script> SecureX Networks. All rights reserved.</span>
+                <div class="flex gap-4">
+                    <a href="#" class="text-muted hover:text-primary">Twitter</a>
+                    <a href="#" class="text-muted hover:text-primary">LinkedIn</a>
+                    <a href="#" class="text-muted hover:text-primary">GitHub</a>
+                </div>
+            </div>
         </div>
+    </footer>
 
-    </div>
-</div>
+    <script>
+    // Chart.js global defaults for dark theme
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font = { family: 'Inter', size: 12 };
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
 
-<script>
-// Chart.js global defaults for dark theme
-Chart.defaults.color = '#ccc';
-Chart.defaults.font = { family: 'Inter', size: 12 };
+    // 1. Line Chart
+    let currentThreats = parseInt("{{ threat_count }}") || 0;
+    let lastRecorded = parseInt(sessionStorage.getItem('lastRecordedThreat'));
+    if (isNaN(lastRecorded)) lastRecorded = currentThreats;
 
-// 1. Line Chart (Server-anchored Real-Time)
-let currentThreats = parseInt("{{ threat_count }}") || 0;
-let lastRecorded = parseInt(sessionStorage.getItem('lastRecordedThreat'));
-if (isNaN(lastRecorded)) lastRecorded = currentThreats;
-
-// Initialize line chart data
-function getStoredData() {
-    const stored = sessionStorage.getItem('chartData');
-    if (stored) return JSON.parse(stored);
-    return [currentThreats, currentThreats, currentThreats, currentThreats, currentThreats, currentThreats, currentThreats];
-}
-let lineData = getStoredData();
-
-// If threat_count increased since last interaction, log a spike!
-let diff = currentThreats - lastRecorded;
-if (diff > 0) {
-    lineData.push(currentThreats);
-    lineData.shift();
-    sessionStorage.setItem('chartData', JSON.stringify(lineData));
-}
-sessionStorage.setItem('lastRecordedThreat', currentThreats);
-
-const ctxLine = document.getElementById('attackChart').getContext('2d');
-const lineChart = new Chart(ctxLine, {
-    type: 'line',
-    data: {
-        labels: ['-12s', '-10s', '-8s', '-6s', '-4s', '-2s', 'Now'],
-        datasets: [{
-            label: 'Total Detections',
-            data: lineData,
-            borderColor: '#00ffcc',
-            backgroundColor: 'rgba(0, 255, 204, 0.15)',
-            borderWidth: 2,
-            pointBackgroundColor: '#00ffcc',
-            fill: true,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        animation: { duration: 400 }, 
-        plugins: { legend: { display: false } },
-        scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, suggestedMin: 0, suggestedMax: currentThreats + 5 }
-        }
+    function getStoredData() {
+        const stored = sessionStorage.getItem('chartData');
+        if (stored) return JSON.parse(stored);
+        return [0, 0, 0, 0, 0, 0, currentThreats];
     }
-});
+    let lineData = getStoredData();
 
-// Ticking engine: It scrolls right but stays exactly at currentThreats
-// with extremely tiny simulated scanner jitter for visual activity.
-setInterval(() => {
-    lineData.shift();
-    // Flatline at currentThreats, 15% chance to animate a "+1" pulse to simulate active scanning
-    let noise = Math.random() > 0.85 ? 1 : 0;
-    lineData.push(currentThreats + noise);
-    lineChart.update();
-    sessionStorage.setItem('chartData', JSON.stringify(lineData));
-}, 2000);
-
-// 2. Bar / Doughnut Chart (Categories tied to Threat Count)
-let doughnutData = JSON.parse(sessionStorage.getItem('doughnutData'));
-if (!doughnutData) {
-    // If no threats, baseline visual
-    doughnutData = currentThreats > 0 ? [currentThreats, 0, 0] : [0, 0, 0];
-    sessionStorage.setItem('doughnutData', JSON.stringify(doughnutData));
-}
-
-// Distribute newly detected threats into random categories
-if (diff > 0) {
-    for (let i = 0; i < diff; i++) {
-        doughnutData[Math.floor(Math.random() * 3)] += 1;
+    let diff = currentThreats - lastRecorded;
+    if (diff > 0) {
+        lineData.push(currentThreats);
+        lineData.shift();
+        sessionStorage.setItem('chartData', JSON.stringify(lineData));
     }
-    sessionStorage.setItem('doughnutData', JSON.stringify(doughnutData));
-}
+    sessionStorage.setItem('lastRecordedThreat', currentThreats);
 
-const ctxBar = document.getElementById('categoryChart').getContext('2d');
-const donutChart = new Chart(ctxBar, {
-    type: 'doughnut',
-    data: {
-        labels: ['SQL Injection', 'XSS Attack', 'Session Hijack'],
-        datasets: [{
-            data: doughnutData,
-            backgroundColor: ['#00ffcc', '#ffaa00', '#ff4444'],
-            borderWidth: 0,
-            hoverOffset: 4
-        }]
-    },
-    options: {
-        responsive: true,
-        animation: { duration: 400 },
-        plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } }
+    const ctxLine = document.getElementById('attackChart').getContext('2d');
+
+    // Cyan gradient fill
+    const gradFill = ctxLine.createLinearGradient(0, 0, 0, 220);
+    gradFill.addColorStop(0, 'rgba(6, 182, 212, 0.35)');
+    gradFill.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+
+    const lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: ['-12s', '-10s', '-8s', '-6s', '-4s', '-2s', 'Now'],
+            datasets: [{
+                label: 'Detections',
+                data: lineData,
+                borderColor: '#06b6d4',
+                backgroundColor: gradFill,
+                borderWidth: 2.5,
+                pointBackgroundColor: '#06b6d4',
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.5
+            }]
         },
-        cutout: '65%'
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 500 },
+            plugins: {
+                legend: { display: false },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b' }
+                },
+                y: {
+                    beginAtZero: true,
+                    suggestedMin: 0,
+                    suggestedMax: Math.max(currentThreats + 5, 10),
+                    ticks: { stepSize: 1, precision: 0, color: '#64748b' },
+                    grid: { color: 'rgba(255,255,255,0.04)' }
+                }
+            }
+        }
+    });
+
+    setInterval(() => {
+        lineData.shift();
+        let noise = Math.random() > 0.85 ? 1 : 0;
+        lineData.push(currentThreats + noise);
+        lineChart.update();
+        sessionStorage.setItem('chartData', JSON.stringify(lineData));
+    }, 2000);
+
+    // 2. Doughnut Chart — always show 3 segments, use [1,1,1] baseline when no real data
+    let doughnutData = JSON.parse(sessionStorage.getItem('doughnutData'));
+    if (!doughnutData) {
+        // Show baseline equal segments when no threats so chart is always visible
+        doughnutData = currentThreats > 0 ? [currentThreats, 0, 0] : [1, 1, 1];
+        sessionStorage.setItem('doughnutData', JSON.stringify(doughnutData));
     }
-});
 
-
-// --- Live Traffic Simulator ---
-const trafficConsole = document.getElementById('live-traffic-console');
-const ips = ['192.168.1.105', '10.0.0.4', '172.16.0.45', '192.168.2.22', '10.0.0.99', '203.0.113.42', '18.144.22.1'];
-const endpoints = ['/api/v1/auth', '/users/profile', '/static/main.js', '/login', '/dashboard/data', '/graphql', '/image/logo.png'];
-const statuses = ['[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[ANOMALY - LOW]', '[CLEAN]'];
-
-function logTraffic() {
-    if(!trafficConsole) return;
-    const now = new Date();
-    const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
-    const ip = ips[Math.floor(Math.random() * ips.length)];
-    const endpoint = endpoints[Math.floor(Math.random() * endpoints.length)];
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    
-    const line = document.createElement('div');
-    line.style.marginBottom = '4px';
-    line.innerHTML = `<span style="color:#555;">[${timeStr}]</span> <span style="color:#aaa;">INGRESS:</span> <span style="color:#fff;">${ip}</span> -> <span style="color:#ffaa00;">${endpoint}</span> `;
-    
-    const statusSpan = document.createElement('span');
-    statusSpan.innerText = status;
-    if(status.includes('CLEAN')) {
-        statusSpan.style.color = '#00ffcc';
-    } else {
-        statusSpan.style.color = '#ffaa00';
+    if (diff > 0) {
+        for (let i = 0; i < diff; i++) {
+            doughnutData[Math.floor(Math.random() * 3)] += 1;
+        }
+        sessionStorage.setItem('doughnutData', JSON.stringify(doughnutData));
     }
-    line.appendChild(statusSpan);
-    
-    trafficConsole.appendChild(line);
-    if (trafficConsole.children.length > 60) {
-        trafficConsole.removeChild(trafficConsole.children[0]); // keep list manageable
+
+    const ctxBar = document.getElementById('categoryChart').getContext('2d');
+    const donutChart = new Chart(ctxBar, {
+        type: 'doughnut',
+        data: {
+            labels: ['SQL Injection', 'XSS Attack', 'Session Hijack'],
+            datasets: [{
+                data: doughnutData,
+                backgroundColor: ['#06b6d4', '#f59e0b', '#ef4444'],
+                borderWidth: 3,
+                borderColor: '#1e293b',
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 600 },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { boxWidth: 12, padding: 16, color: '#94a3b8', font: { size: 12 } }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            const realTotal = currentThreats;
+                            const label = ctx.label;
+                            const val = realTotal > 0 ? ctx.parsed : 0;
+                            return ` ${label}: ${val}`;
+                        }
+                    }
+                }
+            },
+            cutout: '68%'
+        }
+    });
+
+    // --- Live Traffic Simulator ---
+    const trafficConsole = document.getElementById('live-traffic-console');
+    const ips = ['192.168.1.105', '10.0.0.4', '172.16.0.45', '192.168.2.22', '10.0.0.99', '203.0.113.42', '18.144.22.1'];
+    const endpoints = ['/api/v1/auth', '/users/profile', '/static/main.js', '/login', '/dashboard/data', '/graphql', '/image/logo.png'];
+    const statuses = ['[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[CLEAN]', '[ANOMALY - LOW]', '[CLEAN]'];
+
+    function logTraffic() {
+        if(!trafficConsole) return;
+        const now = new Date();
+        const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+        const ip = ips[Math.floor(Math.random() * ips.length)];
+        const endpoint = endpoints[Math.floor(Math.random() * endpoints.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.innerHTML = `<span style="color:#64748b;">[${timeStr}]</span> <span style="color:#94a3b8;">INGRESS:</span> <span style="color:#f8fafc;">${ip}</span> -> <span style="color:#f59e0b;">${endpoint}</span> `;
+
+        const statusSpan = document.createElement('span');
+        statusSpan.innerText = status;
+        statusSpan.style.color = status.includes('CLEAN') ? 'var(--color-success)' : 'var(--color-warning)';
+        line.appendChild(statusSpan);
+
+        trafficConsole.appendChild(line);
+        if (trafficConsole.children.length > 60) {
+            trafficConsole.removeChild(trafficConsole.children[0]);
+        }
+        trafficConsole.scrollTop = trafficConsole.scrollHeight;
+
+        setTimeout(logTraffic, Math.random() * 800 + 200);
     }
-    trafficConsole.scrollTop = trafficConsole.scrollHeight;
-    
-    // Recursive random interval to make the feed look organic
-    setTimeout(logTraffic, Math.random() * 800 + 200);
-}
-setTimeout(logTraffic, 500);
+    setTimeout(logTraffic, 500);
 
-</script>
-
-<!-- FOOTER SECTION -->
-<footer style="background: rgba(10, 10, 10, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); padding: 50px 20px 20px; font-family: 'Inter', sans-serif; margin-top: 40px;">
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 25px;">
-        
-        <!-- Logo / Branding -->
-        <div style="text-align: center;">
-            <h2 style="color: #fff; font-size: 1.8rem; margin: 0; font-weight: 800; letter-spacing: 1px;">Secure<span style="color: #00ffcc;">X</span></h2>
-            <p style="color: #777; font-size: 0.95rem; margin-top: 8px;">Next-Gen AI-Driven Cybersecurity</p>
-        </div>
-        
-        <!-- Links -->
-        <div style="display: flex; gap: 35px; flex-wrap: wrap; justify-content: center; margin: 5px 0;">
-            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#00ffcc'" onmouseout="this.style.color='#a1a1aa'">Privacy Policy</a>
-            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#ffaa00'" onmouseout="this.style.color='#a1a1aa'">Terms of Service</a>
-            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='#a1a1aa'">Compliance</a>
-            <a href="#" style="color: #a1a1aa; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#00ffcc'" onmouseout="this.style.color='#a1a1aa'">API Documentation</a>
-        </div>
-        
-        <!-- Copyright -->
-        <div style="width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; color: #666; font-size: 0.85rem;">
-            <span>&copy; <script>document.write(new Date().getFullYear())</script> SecureX Networks. All rights reserved.</span>
-            <span style="display: flex; gap: 15px;">
-                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">Twitter</a>
-                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">LinkedIn</a>
-                <a href="#" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#666'">GitHub</a>
-            </span>
-        </div>
-    </div>
-</footer>
+    </script>
 
 </body>
 </html>
